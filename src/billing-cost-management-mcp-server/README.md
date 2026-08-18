@@ -14,7 +14,7 @@ MCP server for accessing AWS Billing and Cost Management capabilities.
 
 - **Cost Explorer insights**: Analyze historical and forecasted AWS costs with flexible grouping and filtering
 - **Usage metrics analysis**: Track resource usage trends across your AWS environment
-- **Budget monitoring**: Check existing budgets and their status against actual spending
+- **Budget monitoring**: Check existing budgets and their status against actual spending, plus their configured enforcement actions and alert notifications (per-budget or account-wide)
 - **Cost anomaly detection**: Identify unusual spending patterns and their root causes
 
 ### Cost Optimization Recommendations
@@ -262,7 +262,9 @@ Compute Optimizer Automation:
 - ec2:DescribeVolumes (required by ListRecommendedActions and ListAutomationRulePreview)
 
 AWS Budgets:
-- budgets:ViewBudget
+- budgets:ViewBudget (also covers budget notifications, per-budget and account-wide)
+- budgets:DescribeBudgetActionsForBudget (required for budget actions by budget name)
+- budgets:DescribeBudgetActionsForAccount (required for account-wide budget actions)
 
 AWS Pricing:
 - pricing:DescribeServices
@@ -322,6 +324,10 @@ AWS Invoicing:
 - invoicing:ListProcurementPortalPreferences
 - invoicing:GetProcurementPortalPreference
 
+AWS Billing:
+- billing:GetCredits
+- billing:GetCreditAllocationHistory
+
 #### Configuration
 
 The server uses these key environment variables:
@@ -361,6 +367,8 @@ The server currently supports the following AWS services
 
 2. **AWS Budgets**
    - describe_budgets
+   - describe_budget_actions (DescribeBudgetActionsForBudget / DescribeBudgetActionsForAccount)
+   - describe_budget_notifications (DescribeNotificationsForBudget / DescribeBudgetNotificationsForAccount)
 
 3. **AWS Free Tier**
    - get_free_tier_usage
@@ -435,3 +443,6 @@ The server currently supports the following AWS services
     - `invoicing` tool: list_invoice_summaries
     - `invoice-units` tool: list_invoice_units, get_invoice_unit, batch_get_invoice_profile
     - `procurement-preferences` tool: list_procurement_portal_preferences, get_procurement_portal_preference
+
+13. **AWS Credits**
+    - `credits` tool: get_credits, get_credit_allocation_history
